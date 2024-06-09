@@ -1,5 +1,11 @@
 #!/usr/bin/env groovy
 
+library identifier: 'jenkins-shared-library@react', retriever: modernSCM(
+    [$class: 'GitSCMSource',
+    remote: 'https://github.com/Latix/jenkins-shared-library',
+    credentialsId: 'github-credential']
+)
+
 def gv
 
 pipeline {
@@ -17,8 +23,7 @@ pipeline {
         stage("test") {
             steps {
                 script {
-                    echo "Testing the application"
-                    echo "Executing pipeline for ${BRANCH_NAME}"
+                    buildTest()
                 }
             }
         }
