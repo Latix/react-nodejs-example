@@ -52,8 +52,7 @@ pipeline {
                         sh "ssh -o StrictHostKeyChecking=no ec2-user@3.128.181.33 ${dockerCmd}"
                         // sh "docker stop react-app"
                         // sh "docker rm react-app"
-
-                        sh "${dockerCmd}"
+                        // sh "${dockerCmd}"
                     }
                 }
             }
