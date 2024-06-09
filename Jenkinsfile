@@ -10,7 +10,9 @@ def gv
 
 pipeline {
     agent any
-    
+    environment {
+        IMAGE_NAME = ' weridcoder/react-app:1.0.1'
+    }
     stages {
         stage("init") {
             steps {
@@ -28,18 +30,13 @@ pipeline {
             }
         }
 
-        stage("build") {
+        stage("build image & push to repo") {
             steps {
                 script {
-                    echo "Building the application"
-                }
-            }
-        }
-
-        stage("build image") {
-            steps {
-                script {
-                    echo "Building the image"
+                    echo "Building the image..."
+                    dockerLogin()
+                    buildImage(env.IMAGE_NAME)
+                    dockerPush(env.IMAGE_NAME)
                 }
             }
         }
@@ -47,9 +44,10 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    def dockerCmd = 'docker run -p 3000:80 -d weridcoder/react-app:1.0.0'
+                     echo "Deploying docker image to EC2..."
+                    def dockerCmd = "docker run -p 3000:80 -d ${IMAGE_NAME}"
                     sshagent(['ec2-server-key']) {
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@3.128.181.33 ${dockerCmd}"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@13.58.76.151 ${dockerCmd}"
                         // sh "docker stop react-app"
                         // sh "docker rm react-app"
                         // sh "${dockerCmd}"
