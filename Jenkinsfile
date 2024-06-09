@@ -47,11 +47,12 @@ pipeline {
         stage("deploy") {
             steps {
                 script {
-                    def dockerCmd = 'docker run -p 3000:80 -d --name react-app weridcoder/react-app:1.0.0'
+                    def dockerCmd = 'docker run -p 3000:80 -d weridcoder/react-app:1.0.0'
                     sshagent(['ec2-server-key']) {
                         sh "ssh -o StrictHostKeyChecking=no ec2-user@3.128.181.33 ${dockerCmd}"
-                        sh "docker stop react-app"
-                        sh "docker rm react-app"
+                        // sh "docker stop react-app"
+                        // sh "docker rm react-app"
+
                         sh "${dockerCmd}"
                     }
                 }
