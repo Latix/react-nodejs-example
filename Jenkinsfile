@@ -49,7 +49,7 @@ pipeline {
                 script {
                     def dockerCmd = 'docker run -p 3000:80 -d --name react-app weridcoder/react-app:1.0.0'
                     sshagent(['ec2-server-key']) {
-                        sh "ssh -o StrictHostKeyChecking=no ec2-user@3.17.141.248 ${dockerCmd}"
+                        sh "ssh -o StrictHostKeyChecking=no ec2-user@3.128.181.33 ${dockerCmd}"
                         sh "docker stop react-app"
                         sh "docker rm react-app"
                         sh "${dockerCmd}"
